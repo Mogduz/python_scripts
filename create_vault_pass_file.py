@@ -29,7 +29,7 @@ def check_path_arg(value: str) -> str:
 def parse_args() -> argparse.Namespace:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(prog=script_name, description=script_description)
     parser.add_argument('--length', type=check_length_arg, default=check_length_arg(value=16), help='')
-    parser.add_argument('path', type=)
+    parser.add_argument('path', type=check_path_arg, help='')
     return parser.parse_args()
 
 
