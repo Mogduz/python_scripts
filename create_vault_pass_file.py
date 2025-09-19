@@ -22,16 +22,23 @@ def check_path_arg(value: str) -> str:
         path: Path = Path(value)
         path: Path = path.resolve()
         if not path.parent.exists():
-            create_parents: str = input(f'Patents: {path.parents} not exists. Do want to create it? Y/n: ')
-            if create_parents.lower() in ['', 'y', 'n']:
-                if create_parents.lower() == 'y' or create_parents.lower() == '':
-                    path.parent.mkdir(parents=True)
-                elif create_parents.lower() == 'n':
-                    print(f'Path: {path} not found. exit')
-                    exit(1)
+            create_parents: str = input(f'Parents: {path.parents} not exists. Do want to create it? Y/n: ')
+            if create_parents.lower() == 'y' or create_parents.lower() == '':
+                path.parent.mkdir(parents=True)
+            elif create_parents.lower() == 'n':
+                print(f'Path: {path} not found. exit')
+                exit(1)
             else:
-                raise ValueError(f'input was false. abort') 
-        return path
+                raise ValueError(f'input was false. abort')
+        if path.exists():
+            overwrite_file: str = input(f'File: {path} allready exists. Overwrite it? y/N: ')
+            if overwrite_file.lower() == 'y':
+                return path
+            elif overwrite_file.lower() == '' or 'n':
+                print('File will not overwritten. exit')
+                exit(2)
+            else:
+                raise ValueError(f'input was false. abort')
     else:
         raise argparse.ArgumentTypeError(f"'{value}' ist kein String")
 
