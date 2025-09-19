@@ -46,6 +46,8 @@ def parse_args() -> argparse.Namespace:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(prog=script_name, description=script_description)
     parser.add_argument('--length', type=check_length_arg, default=check_length_arg(value=16), help='')
     parser.add_argument('path', type=check_path_arg, help='')
+    parser.add_argument('--overwrite', action='store_true', default=False, required=False, help='')
+    parser.add_argument('--create_parents', action='store_true', default=False, required=False, help='')
     return parser.parse_args()
 
 def generate_secret(length: int) -> str:
@@ -54,5 +56,6 @@ def generate_secret(length: int) -> str:
 
 if __name__ == '__main__':
     args: argparse.Namespace = parse_args()
-    file: Path = args.path
-    file.write_text(data=generate_secret(length=args.length))
+    print(args)
+    #file: Path = args.path
+    #file.write_text(data=generate_secret(length=args.length))
