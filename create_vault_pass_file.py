@@ -22,8 +22,8 @@ def check_path_arg(value: str) -> str:
         path: Path = path.resolve()
         if not path.parent.exists():
             create_parents: str = input(f'Patents: {path.parents} not exists. Do want to create it? Y/n: ')
-            if create_parents.lower() in ['y', 'n']:
-                if create_parents.lower() == 'y':
+            if create_parents.lower() in ''['', 'y', 'n']:
+                if create_parents.lower() == 'y' or create_parents.lower() == '':
                     path.parent.mkdir(parents=True)
                 elif create_parents.lower() == 'n':
                     print(f'Path: {path} not found. exit')
