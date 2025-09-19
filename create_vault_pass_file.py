@@ -77,8 +77,13 @@ def check_path(path: Path, overwrite: bool = False, create_parents: bool = False
 
 def do_work(args: argparse.Namespace) -> None:
     can_write: bool = check_path(path=args.path, overwrite=args.overwrite, create_parents=args.create_parents)
-    print(args)
-    print(can_write)
+    if can_write:
+        print(f'writing secret to file: {args.path}')
+        file: Path = args.path
+        file.write_text(data=generate_secret(length=args.length))
+        print(f'file: {file} sucessfull written. exit')
+    else:
+        print('can not write file. exit')
 
 if __name__ == '__main__':
     do_work(args=parse_args())
