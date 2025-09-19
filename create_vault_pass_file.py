@@ -20,6 +20,8 @@ def check_path_arg(value: str) -> str:
     if isinstance(value, str):
         file: str = value.split('/')[len(value.split('/')) - 1]
         path: str = value.strip(f'/{file}')
+        if path == '.' or path == '..':
+            path = os.path.abspath(path=f'{path}/')
         print(file)
         print(path)
         return value
