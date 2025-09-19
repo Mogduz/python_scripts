@@ -17,7 +17,7 @@ def check_length_arg(value: str | int) -> int:
 
 def parse_args() -> argparse.Namespace:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(prog=script_name, description=script_description)
-    parser.add_argument('length', type=check_length_arg, default=check_length_arg(value=16), help='')
+    parser.add_argument('--length', type=check_length_arg, default=check_length_arg(value=16), help='')
     return parser.parse_args()
 
 
