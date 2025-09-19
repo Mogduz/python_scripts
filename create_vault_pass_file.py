@@ -21,7 +21,7 @@ def check_path_arg(value: str) -> str:
     if isinstance(value, str):
         path: Path = Path(value)
         path: Path = path.resolve()
-        return Path
+        return path
     else:
         raise argparse.ArgumentTypeError(f"'{value}' ist kein String")
 
