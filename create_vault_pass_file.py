@@ -1,5 +1,6 @@
 import argparse
 from pathlib import Path
+import secrets
 
 script_name: str = 'create_ansible_vault_pass_file'
 script_description: str = ''
@@ -40,7 +41,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('path', type=check_path_arg, help='')
     return parser.parse_args()
 
+def generate_secret(length: int) -> str:
+    return secrets.token_urlsafe(length)
+
 
 if __name__ == '__main__':
     args: argparse.Namespace = parse_args()
-    print(args)
+    file: Path = args.path
+    file.write_text(data=generate_secret(length=args.length))
