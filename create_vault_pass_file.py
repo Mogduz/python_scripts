@@ -1,5 +1,5 @@
 import argparse
-import os
+from pathlib import Path
 
 script_name: str = 'create_ansible_vault_pass_file'
 script_description: str = ''
@@ -18,13 +18,18 @@ def check_length_arg(value: str | int) -> int:
 
 def check_path_arg(value: str) -> str:
     if isinstance(value, str):
-        file: str = value.split('/')[len(value.split('/')) - 1]
-        path: str = value.strip(f'/{file}')
-        if path == '.' or path == '..':
-            path = os.path.abspath(path=f'{path}/')
-        print(file)
-        print(path)
-        return value
+        path: Path = Path(value)
+        path: Path = path.resolve()
+        if not path.parent.exists:
+            create_parents: str = input(f'Patents: {path.parents} not exists. Do want to create it? Y/n')
+            if create_parents.lower() in ['y', 'n']:
+                if create_parents.lower() == 'y':
+                    path.parent.mkdir(parents=True)
+                elif create_parents.lower() == 'n':
+                    print(f'Path: {path} not found. exit')
+            else:
+                raise ValueError(f'input was false. abort') 
+        return path
     else:
         raise argparse.ArgumentTypeError(f"'{value}' ist kein String")
 
