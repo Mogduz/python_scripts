@@ -87,5 +87,3 @@ def do_work(args: argparse.Namespace) -> None:
 
 if __name__ == '__main__':
     do_work(args=parse_args())
-    #file: Path = args.path
-    #file.write_text(data=generate_secret(length=args.length))
