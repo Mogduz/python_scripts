@@ -27,6 +27,7 @@ def check_path_arg(value: str) -> str:
                     path.parent.mkdir(parents=True)
                 elif create_parents.lower() == 'n':
                     print(f'Path: {path} not found. exit')
+                    exit(1)
             else:
                 raise ValueError(f'input was false. abort') 
         return path
