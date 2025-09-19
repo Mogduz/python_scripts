@@ -37,8 +37,6 @@ def generate_secret(length: int) -> str:
     return secrets.token_urlsafe(length)
 
 def check_path(path: Path, overwrite: bool = False, create_parents: bool = False) -> bool:
-    print(path)
-    exit(1)
     if not path.parent.exists():
         if not create_parents:
             create_parents_question: str = input(f'Parent directories: {path.parents} not exists. Do want to create it? Y/n: ').lower()
