@@ -58,7 +58,8 @@ def check_length_arg(value: str | int) -> int:
         except ValueError:
             # (Allowed change) English exception message
             raise argparse.ArgumentTypeError(f"Value '{value}' is not an integer.")
-        
+    print(value)
+    exit(1)    
     if value > valid_min_length and value <= valid_max_length:
         
         if value < 64:
