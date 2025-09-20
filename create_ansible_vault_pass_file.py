@@ -133,7 +133,7 @@ def parse_args() -> argparse.Namespace:
     )
     # Filled-in, clear help texts (allowed change).
     parser.add_argument(
-        '--length',
+        '--length, -l',
         type=check_length_arg,
         default=recomended_length,
         help=(
@@ -143,7 +143,7 @@ def parse_args() -> argparse.Namespace:
         )
     )
     parser.add_argument(
-        'path',
+        '--path. -p',
         action='store',
         default=None,
         help=(
@@ -153,21 +153,21 @@ def parse_args() -> argparse.Namespace:
         )
     )
     parser.add_argument(
-        '--overwrite',
+        '--overwrite, -o',
         action='store_true',
         default=False,
         required=False,
         help="Overwrite the file if it already exists without asking for confirmation."
     )
     parser.add_argument(
-        '--create_parents',
+        '--create_parents, -c',
         action='store_true',
         default=False,
         required=False,
         help="Create any missing parent directories of the target path without asking for confirmation."
     )
     parser.add_argument(
-        '--description',
+        '--description, -d',
         action='store_true',
         default=False,
         required=False,
