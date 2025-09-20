@@ -133,7 +133,7 @@ def parse_args() -> argparse.Namespace:
     )
     # Filled-in, clear help texts (allowed change).
     parser.add_argument(
-        '-l', '--length'
+        '-l', '--length',
         type=check_length_arg,
         default=recomended_length,
         help=(
