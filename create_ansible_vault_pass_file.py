@@ -149,46 +149,30 @@ def check_path(path: Path, overwrite: bool = False, create_parents: bool = False
     Returns:
         True if the file can be safely written; False otherwise.
     """
-    # Parent does not exist: optionally ask to create it (interactive).
+    
     if not path.parent.exists():
         if not create_parents:
-            # NOTE: Prompt text left unchanged because it's not a print or exception.
-            create_parents_question: str = input(f'Parent directories: {path.parents} not exists. Do want to create it? Y/n: ').lower()
-            # Interpret common single-character responses.
-            if len(create_parents_question) == 0 or len(create_parents_question) == 1:
-                match create_parents_question:
-                    case 'y':
-                        create_parents: bool = True
-                    case '':
-                        create_parents: bool = True
-                    case _:
-                        create_parents: bool = False
-            else:
-                create_parents: bool = False
+            create_parents_question: bool = ask_yes_no_question(promt=f'Parent directories: {path.parents} not exists. Do want to create it?', default='y')
+            if create_parents_question:            
+                create_parents: bool = True            
         if create_parents:
-            # Create the entire parent directory tree if requested/confirmed.
             path.parent.mkdir(parents=True)
+        else:
+            print(f'can not create file without parent directories. user abort. exit')
+            exit(4)
 
-    # If parent exists and file does not: we are good to proceed.
-    if path.parent.exists() and not path.exists():
-        file_ok: bool = True
-
-    # If both parent and file exist: possibly prompt for overwrite.
     if path.parent.exists() and path.exists():
         if not overwrite:
-            # NOTE: Prompt text left unchanged because it's not a print or exception.
-            overwrite_question: str = input(f'file: {path} allready exists. Overwrite? y/N: ').lower()
-            # Accept single-character inputs (y/n) or empty as "no" by default.
-            if len(overwrite_question) == 1 or len(overwrite_question) == 1:
-                match overwrite_question:
-                    case 'n':
-                        overwrite: bool = False
-                    case '':
-                        overwrite: bool = False
-                    case 'y':
-                        overwrite: bool = True
+            overwrite_question: bool = ask_yes_no_question(promt=f'file: {path} allready exists. Overwrite?', default='n')
+            if overwrite_question:
+                return True
             else:
-                overwrite: bool = False
+                print('overwrite abort by user. exit')
+                exit(5)
+        if overwrite:
+            return True
+    return True        
+
 
     # If overwrite is allowed and the file exists, we're good.
     if path.parent.exists() and path.exists() and overwrite:
