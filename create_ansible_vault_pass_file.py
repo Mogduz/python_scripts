@@ -252,8 +252,6 @@ def check_path(path: Path, overwrite: bool = False, create_parents: bool = False
 
 
 def do_work(args: argparse.Namespace) -> None:
-    print(args)
-    exit(1)
     if args.description:
         print(script_description)
         raise SystemExit(0)
