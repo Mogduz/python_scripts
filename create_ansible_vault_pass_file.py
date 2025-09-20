@@ -108,7 +108,7 @@ def parse_args() -> argparse.Namespace:
     not modifying outputs other than `print`/exceptions.
     """
     parser: argparse.ArgumentParser = argparse.ArgumentParser(prog=script_name, description=script_description)
-    parser.add_argument('--length', type=check_length_arg, default=check_length_arg(value=64), help='')
+    parser.add_argument('--length', type=check_length_arg, default=128, help='')
     parser.add_argument('path', type=check_path_arg, help='')
     parser.add_argument('--overwrite', action='store_true', default=False, required=False, help='')
     parser.add_argument('--create_parents', action='store_true', default=False, required=False, help='')
