@@ -20,7 +20,7 @@ Notes:
   files it is common to restrict access (e.g., `chmod 600`), which you
   may wish to enforce externally.
 """
-
+from question import ask_yes_no_question
 import argparse
 from pathlib import Path
 import secrets
@@ -58,9 +58,12 @@ def check_length_arg(value: str | int) -> int:
             # (Allowed change) English exception message
             raise argparse.ArgumentTypeError(f"Value '{value}' is not an integer.")
         
-    if value not in valid_lengths:
-        # (Allowed change) English exception message
-        raise argparse.ArgumentTypeError(f"Value must be one of {valid_lengths}.")
+    if value > 0 and value <= 65000:
+        
+        if value < 64:
+            password_question: bool = ask_yes_no_question(promt=f'your selected password length is {value}. we recomed a length from 128. do you want create a secret with a length from {value}?', default='y')
+            print(password_question)
+            exit(1)
     return value
 
 
@@ -99,7 +102,7 @@ def parse_args() -> argparse.Namespace:
     not modifying outputs other than `print`/exceptions.
     """
     parser: argparse.ArgumentParser = argparse.ArgumentParser(prog=script_name, description=script_description)
-    parser.add_argument('--length', type=check_length_arg, default=check_length_arg(value=16), help='')
+    parser.add_argument('--length', type=check_length_arg, default=check_length_arg(value=128), help='')
     parser.add_argument('path', type=check_path_arg, help='')
     parser.add_argument('--overwrite', action='store_true', default=False, required=False, help='')
     parser.add_argument('--create_parents', action='store_true', default=False, required=False, help='')
