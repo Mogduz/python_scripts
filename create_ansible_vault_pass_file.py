@@ -30,7 +30,8 @@ import secrets
 script_name: str = 'create_ansible_vault_pass_file'
 script_description: str = ''
 # Only these lengths are accepted for the random token generation.
-valid_lengths: list = [16, 32, 64, 128]
+valid_min_length: int = 1
+valid_max_length: int = 65000 
 
 
 def check_length_arg(value: str | int) -> int:
@@ -58,13 +59,17 @@ def check_length_arg(value: str | int) -> int:
             # (Allowed change) English exception message
             raise argparse.ArgumentTypeError(f"Value '{value}' is not an integer.")
         
-    if value > 0 and value <= 65000:
+    if value > valid_min_length and value <= valid_max_length:
         
         if value < 64:
             password_question: bool = ask_yes_no_question(promt=f'your selected password length is {value}. we recomed a length from 128. do you want create a secret with a length from {value}?', default='y')
-            print(password_question)
-            exit(1)
-    return value
+            if password_question:
+                return value
+            else:
+                print('user abort password length. exit')
+                exit(3)
+    else:
+        raise ValueError(f'invalid value! value must beetween {valid_min_length} and {valid_max_length}')
 
 
 def check_path_arg(value: str) -> str:
