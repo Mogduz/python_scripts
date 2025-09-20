@@ -146,7 +146,6 @@ def parse_args() -> argparse.Namespace:
         'path',
         action='store',
         default=None,
-        required=False,
         help=(
             "Destination file path for the generated secret (e.g. ~/.vault_pass). "
             "The path is resolved to an absolute path. Use --create_parents to "
