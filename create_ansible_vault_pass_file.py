@@ -28,7 +28,14 @@ import secrets
 # Script metadata and configuration. `script_description` intentionally
 # remains empty to avoid altering the CLI header beyond what you asked.
 script_name: str = 'create_ansible_vault_pass_file'
-script_description: str = ''
+script_description: str = (
+    "Generate a high-entropy, URL-safe secret and write it to a file for use as an "
+    "Ansible Vault password file. The tool can optionally create missing parent "
+    "directories and confirm before overwriting existing files. You can also choose "
+    "the number of random BYTES passed to secrets.token_urlsafe() for stronger entropy. "
+    "Typical workflow: run this once to create ~/.vault_pass and then reference that "
+    "file via --vault-password-file or a matching --vault-id in your Ansible commands."
+)
 
 # Recommended default length (in *bytes of randomness* for token_urlsafe).
 # Do not change program logic: only messaging and help texts are adjusted.
@@ -158,8 +165,14 @@ def parse_args() -> argparse.Namespace:
         required=False,
         help="Create any missing parent directories of the target path without asking for confirmation."
     )
+    parser.add_argument(
+        '--description',
+        action='store_true',
+        default=False,
+        required=False,
+        help="Print the script description and exit."
+    )
     return parser.parse_args()
-
 
 def generate_secret(length: int) -> str:
     """
@@ -238,6 +251,9 @@ def check_path(path: Path, overwrite: bool = False, create_parents: bool = False
 
 
 def do_work(args: argparse.Namespace) -> None:
+    if args.description:
+        print(script_description)
+        raise SystemExit(0)
     """
     Orchestrate the path checks and write the secret to disk.
     """
