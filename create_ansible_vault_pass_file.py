@@ -96,33 +96,6 @@ def check_length_arg(value: str | int) -> int:
         return value
 
 
-def check_path_arg(value: str) -> str:
-    """
-    Validate and normalize the positional `path` argument.
-
-    Converts the provided string to a `Path` object and resolves it to an
-    absolute path. Returns the resolved `Path`. The return type annotation
-    intentionally mirrors the original code.
-
-    Args:
-        value: The path as a string.
-
-    Returns:
-        The resolved `Path` object (returned as-is).
-
-    Raises:
-        argparse.ArgumentTypeError: If `value` is not a string.
-    """
-    if isinstance(value, str):
-        path: Path = Path(value)
-        # Resolve to an absolute path to avoid ambiguity when writing.
-        path: Path = path.resolve()
-        return path
-    else:
-        # Improved, clear English error message (allowed change).
-        raise argparse.ArgumentTypeError(f"Value '{value}' is not a string.")
-
-
 def parse_args() -> argparse.Namespace:
     """
     Build the CLI parser and parse arguments.
@@ -258,17 +231,23 @@ def do_work(args: argparse.Namespace) -> None:
     """
     Orchestrate the path checks and write the secret to disk.
     """
+    if isinstance(args.path, str):
+        path: Path = Path(args.path)
+        # Resolve to an absolute path to avoid ambiguity when writing.
+        path: Path = path.resolve()
+    else:
+        # Improved, clear English error message (allowed change).
+        raise argparse.ArgumentTypeError(f"Value '{args.path}' is not a string.")
     can_write: bool = check_path(
-        path=args.path,
+        path=path,
         overwrite=args.overwrite,
         create_parents=args.create_parents
     )
     if can_write:
         # Improved, clear English status outputs (allowed change).
-        print(f"Writing secret to: {args.path}")
-        file: Path = args.path
-        file.write_text(data=generate_secret(length=args.length))
-        print(f"Secret written successfully to '{file}'. Exiting.")
+        print(f"Writing secret to: {path}")
+        path.write_text(data=generate_secret(length=args.length))
+        print(f"Secret written successfully to '{path}'. Exiting.")
     else:
         print("Cannot write file (path checks failed). Exiting.")
 
