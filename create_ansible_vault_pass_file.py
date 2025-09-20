@@ -30,9 +30,7 @@ import secrets
 script_name: str = 'create_ansible_vault_pass_file'
 script_description: str = ''
 # Only these lengths are accepted for the random token generation.
-valid_min_length: int = 1
-valid_max_length: int = 65000 
-
+recomended_length: int = 128
 
 def check_length_arg(value: str | int) -> int:
     """
@@ -59,17 +57,19 @@ def check_length_arg(value: str | int) -> int:
             # (Allowed change) English exception message
             raise argparse.ArgumentTypeError(f"Value '{value}' is not an integer.")
   
-    if value > valid_min_length and value <= valid_max_length:
-        
-        if value < 64:
-            password_question: bool = ask_yes_no_question(promt=f'your selected password length is {value}. we recomed a length from 128. do you want create a secret with a length from {value}?', default='y')
-            if password_question:
-                return value
+    if value < recomended_length:
+        secret_question: bool = ask_yes_no_question(promt=f'your selected secrect length is {value}. we recomed a length from {recomended_length}. do you want create a secret with a length from {value}?', default='y')
+        if secret_question:
+            return value
+        else:
+            secret_question: bool = ask_yes_no_question(promt=f'do you want to change the secret length to default ({recomended_length})?', default='y')
+            if secret_question:
+                return recomended_length
             else:
                 print('user abort password length. exit')
                 exit(3)
     else:
-        raise ValueError(f'invalid value! value must beetween {valid_min_length} and {valid_max_length}')
+        return value
 
 
 def check_path_arg(value: str) -> str:
@@ -107,7 +107,7 @@ def parse_args() -> argparse.Namespace:
     not modifying outputs other than `print`/exceptions.
     """
     parser: argparse.ArgumentParser = argparse.ArgumentParser(prog=script_name, description=script_description)
-    parser.add_argument('--length', type=check_length_arg, default=128, help='')
+    parser.add_argument('--length', type=check_length_arg, default=recomended_length, help='')
     parser.add_argument('path', type=check_path_arg, help='')
     parser.add_argument('--overwrite', action='store_true', default=False, required=False, help='')
     parser.add_argument('--create_parents', action='store_true', default=False, required=False, help='')
